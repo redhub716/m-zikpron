@@ -4,7 +4,7 @@ import { WebSocketServer } from 'ws';
 import jwt from 'jsonwebtoken';
 import os from 'os';
 import path from 'path';
-import { client, queues, searchAndQueue, playNext, destroyQueue } from '../bot/client.js';
+import { client, queues, searchAndQueue, playNext, destroyQueue, setWsBroadcastCallback } from '../bot/client.js';
 import { getAllowedUsers, addAllowedUser, removeAllowedUser, getSettings, updateSettings } from '../config.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key_for_music_bot';
