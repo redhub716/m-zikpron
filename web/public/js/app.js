@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Lucide ikonlarını yükle
   lucide.createIcons();
   
+  // Renk Temasını Başlat
+  initTheme();
+  
   // İlk ekran kontrolü
   checkAuth();
   
@@ -335,6 +338,64 @@ function setupEventListeners() {
       setLoading(btn, false, 'Yetkilendir', 'plus');
     }
   });
+
+  // --- Renk Teması Seçici Etkinlikleri (Yeni) ---
+  document.querySelectorAll('.theme-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      const theme = dot.getAttribute('data-theme');
+      applyTheme(theme);
+    });
+  });
+
+  // --- Hızlı Şarkı Çalma Buton Etkinlikleri (Yeni) ---
+  document.querySelectorAll('.btn-quick').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!activeGuildId) return alert('Lütfen önce bir sunucu seçin!');
+      
+      const query = btn.getAttribute('data-query');
+      const voiceChannelSelect = document.getElementById('vc-select');
+      const voiceChannelId = voiceChannelSelect.value;
+      
+      if (!voiceChannelId) {
+        return alert('Lütfen botun katılacağı bir ses kanalı seçin!');
+      }
+      
+      // Arama kutusuna doldur ve formu tetikle
+      document.getElementById('search-query').value = query;
+      
+      // Arama butonunu bul ve tıkla
+      const searchForm = document.getElementById('search-music-form');
+      const submitBtn = searchForm.querySelector('button[type="submit"]');
+      submitBtn.click();
+    });
+  });
+}
+
+// --- TEMA YÖNETİM FONKSİYONLARI (Yeni) ---
+function initTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'purple';
+  applyTheme(savedTheme);
+}
+
+function applyTheme(themeName) {
+  // Önceki sınıfları temizle
+  document.body.classList.remove('theme-purple', 'theme-cyan', 'theme-pink', 'theme-green');
+  
+  // Yeni temayı ekle (Mor varsayılan olduğu için eklemeye gerek yok)
+  if (themeName !== 'purple') {
+    document.body.classList.add(`theme-${themeName}`);
+  }
+  
+  // Aktif noktayı görsel olarak güncelle
+  document.querySelectorAll('.theme-dot').forEach(dot => {
+    if (dot.getAttribute('data-theme') === themeName) {
+      dot.classList.add('active');
+    } else {
+      dot.classList.remove('active');
+    }
+  });
+  
+  localStorage.setItem('theme', themeName);
 }
 
 // --- DİNAMİK ARAYÜZ YARDIMCILARI ---
